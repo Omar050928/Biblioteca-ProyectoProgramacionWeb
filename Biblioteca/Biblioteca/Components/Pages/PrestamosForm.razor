@@ -1,0 +1,109 @@
+﻿@page "/prestamos/nueva"
+@page "/prestamos/editar/{Id:int}"
+@rendermode InteractiveServer
+@inject NavigationManager _navigator;
+@inject IRepositorioPrestamos _repositorio;
+@inject IRepositorioAlumnos _repositorioAlumnos;
+@inject IRepositorioLibros _repositorioLibros;
+<h2>@_mensaje Prestamos</h2>
+
+
+
+@if (_alumnos == null || _libros == null)
+{
+    <p>Cargando datos...</p>
+}
+else
+{
+    <EditForm Model="_prestamo" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+
+        <div class="mb-3">
+            <label>Alumno</label>
+            <InputSelect class="form-select" @bind-Value="_prestamo.AlumnoId">
+                <option value="">Seleccione un alumno</option>
+                @foreach (var alumno in _alumnos)
+                {
+                    <option value="@alumno.Id">@alumno.Nombre - @alumno.Correo - @alumno.Grado</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => _prestamo.AlumnoId)" />
+        </div>
+
+        <div class="mb-3">
+            <label>Libro</label>
+            <InputSelect class="form-select" @bind-Value="_prestamo.LibroId">
+                <option value="">Seleccione un libro</option>
+                @foreach (var libro in _libros)
+                {
+                    <option value="@libro.Id">@libro.Titulo - @libro.Autor</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => _prestamo.LibroId)" />
+        </div>
+
+        <div class="mb-3">
+            <label>Fecha de préstamo</label>
+            <InputDate class="form-control" @bind-Value="_prestamo.FechaPrestamo" />
+            <ValidationMessage For="@(() => _prestamo.FechaPrestamo)" />
+        </div>
+
+        <div class="mb-3">
+            <label>Fecha de devolución</label>
+            <InputDate class="form-control" @bind-Value="_prestamo.FechaDevolucion" />
+            <ValidationMessage For="@(() => _prestamo.FechaDevolucion)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button class="btn btn-danger ms-3" @onclick="Cancelar" @onclick:preventDefault>Cancelar</button>
+    </EditForm>
+}
+
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private string _mensaje = "";
+    private Prestamos? _prestamo = new();
+    private List<Alumnos> _alumnos = new();
+    private List<Libros> _libros = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _alumnos = await _repositorioAlumnos.GetAll();
+        _libros = await _repositorioLibros.GetAll();
+
+        if (Id > 0)
+        {
+            _prestamo = await _repositorio.Get(Id);
+            _mensaje = "Modificar";
+        }
+        else
+        {
+            _mensaje = "Nuevo";
+
+            // Asignar fechas por defecto
+            _prestamo.FechaPrestamo = DateTime.Now;
+            _prestamo.FechaDevolucion = DateTime.Now.AddMonths(1);
+        }
+    }
+
+    private async void Guardar()
+    {
+        if (Id > 0)
+        {
+            await _repositorio.Update(Id, _prestamo!);
+        }
+        else
+        {
+            await _repositorio.Add(_prestamo!);
+        }
+        Cancelar();
+    }
+
+    private void Cancelar()
+    {
+        _navigator.NavigateTo("/prestamos");
+    }
+}

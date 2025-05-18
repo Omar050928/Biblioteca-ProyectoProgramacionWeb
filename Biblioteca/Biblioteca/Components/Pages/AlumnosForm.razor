@@ -1,0 +1,70 @@
+﻿@page "/alumnos/nueva"
+@page "/alumnos/editar/{Id:int}"
+@rendermode InteractiveServer
+@inject NavigationManager _navigator;
+@inject IRepositorioAlumnos _repositorio;
+<h2>@_mensaje Alumno</h2>
+<EditForm Model="_alumno" FormName="frmAlumnos" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="row mb-3">
+        <label for="txtNombre" class="col-2 col-form-label">Nombre</label>
+        <div class="col-10">
+            <InputText id="txtNombre" class="form-control" @bind-Value="_alumno.Nombre" />
+            <ValidationMessage For="()=>_alumno.Nombre" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="txtCorreo" class="col-2 col-form-label">Correo</label>
+        <div class="col-10">
+            <InputText id="txtCorreo" class="form-control" @bind-Value="_alumno.Correo" />
+            <ValidationMessage For="()=>_alumno.Correo" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="txtTelefono" class="col-2 col-form-label">Grado</label>
+        <div class="col-10">
+            <InputText id="txtTelefono" class="form-control" @bind-Value="_alumno.Grado" />
+            <ValidationMessage For="()=>_alumno.Grado" />
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button class="btn btn-danger ms-3" @onclick="Cancelar" @onclick:preventDefault>Cancelar</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private string _mensaje = "";
+    private Alumnos? _alumno = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id > 0)
+        {
+            _alumno = await _repositorio.Get(Id);
+            _mensaje = "Modificar";
+        }
+        else
+        {
+            _mensaje = "Nuevo";
+        }
+    }
+
+    private async void Guardar()
+    {
+        if (Id > 0)
+        {
+            await _repositorio.Update(Id, _alumno!);
+        }
+        else
+        {
+            await _repositorio.Add(_alumno!);
+        }
+        Cancelar();
+    }
+
+    private void Cancelar()
+    {
+        _navigator.NavigateTo("/alumnos");
+    }
+}
