@@ -9,5 +9,7 @@ namespace Biblioteca.Repositorio
         Task<Libros> Add(Libros libro);
         Task Update(int id, Libros libro);
         Task Delete(int id);
+
+        Task<bool> canDelete(int id);
     }
 }

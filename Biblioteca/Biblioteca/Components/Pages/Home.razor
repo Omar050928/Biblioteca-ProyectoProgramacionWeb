@@ -1,8 +1,45 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Inicio | Biblioteca Escolar</PageTitle>
 
-<h1>Libros de una biblioteca escolar</h1>
-<p>Revisa los <a href="alumnos" title="Ver los alumnos">alumnos</a> que están registrados en la biblioteca</p>
-<p>Revisa los <a href="libros" title="Ver los libros">libros</a> que hay en la biblioteca y los que están siendo prestados</p>
-<p>Revisa los <a href="prestamos" title="Ver los prestamos">prestamos</a> que tiene cada alumno con su respectivo libro prestado</p>
+<div class="container py-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4 fw-bold text-primary">📚 Biblioteca Escolar</h1>
+        <p class="lead">Gestiona los alumnos, libros y préstamos de manera sencilla y rápida.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-people-fill text-success" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Alumnos</h5>
+                    <p class="card-text">Consulta y administra los alumnos registrados en la biblioteca.</p>
+                    <a href="alumnos" class="btn btn-outline-success w-100">Ver Alumnos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-book-half text-warning" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Libros</h5>
+                    <p class="card-text">Revisa los libros disponibles y los actualmente prestados.</p>
+                    <a href="libros" class="btn btn-outline-warning w-100">Ver Libros</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-journal-arrow-down text-danger" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Préstamos</h5>
+                    <p class="card-text">Consulta qué libros tiene prestados cada alumno.</p>
+                    <a href="prestamos" class="btn btn-outline-danger w-100">Ver Préstamos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

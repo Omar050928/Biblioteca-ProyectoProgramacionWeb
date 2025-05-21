@@ -12,6 +12,11 @@
         </svg>
     </a>
 </div>
+
+@if(_error) {
+    <div class="alert alert-danger">No se puede eliminar el alumno mientras tenga un prestamo</div>
+}
+
 @if (_alumno == null)
 {
     <div class="spinner-border" role="status">
@@ -60,6 +65,7 @@ else
 
 @code {
     private List<Alumnos> _alumno = new();
+    private bool _error = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,9 +74,15 @@ else
 
     private async void Eliminar(Alumnos alumno)
     {
-        await _repositorio.Delete(alumno.Id);
-        _alumno!.Remove(alumno);
-        StateHasChanged();
+        if(await _repositorio.canDelete(alumno.Id)){
+            await _repositorio.Delete(alumno.Id);
+            _alumno!.Remove(alumno);
+            _error = false;
+        } 
+        else {
+            _error = true;
+        }
+        await InvokeAsync(StateHasChanged);
     }
 
     private void Modificar(int id)

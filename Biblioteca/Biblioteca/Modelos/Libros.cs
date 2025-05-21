@@ -11,5 +11,6 @@ namespace Biblioteca.Modelos
         [Required(ErrorMessage = "El autor es obligatorio")]
         [StringLength(100, ErrorMessage = "Maximo 100 caracteres")]
         public string? Autor { get; set; }
+        virtual public List<Prestamos>? Prestamos { get; set; }
     }
 }

@@ -19,6 +19,12 @@ namespace Biblioteca.Repositorio
             return libro;
         }
 
+        public async Task<bool> canDelete(int id)
+        {
+            var delete = await _context.Libros.Include(l => l.Prestamos).SingleAsync(l => l.Id == id);
+            return delete.Prestamos?.Count() == 0;
+        }
+
         public async Task Delete(int id)
         {
             var libro = await _context.Libros.FindAsync(id);

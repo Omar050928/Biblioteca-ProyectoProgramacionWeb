@@ -15,5 +15,6 @@ namespace Biblioteca.Modelos
         [Required(ErrorMessage = "El grado es obligatorio")]
         [StringLength(2, ErrorMessage = "Maximo 2 caracteres")]
         public string? Grado { get; set; }
+        virtual public List<Prestamos>? Prestamos { get; set; }
     }
 }
